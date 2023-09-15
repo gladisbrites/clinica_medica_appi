@@ -1,4 +1,4 @@
-package med.voll.api.medico;
+package med.voll.api.domain.medico;
 //UN DTO RECIBE Y DEVUELVE DATOS AL FRONT
 //recibe el pedido de nombre, especialidad,
 // documento y email del front y los devuelve en un listado con solo esos campos -es un DTO
