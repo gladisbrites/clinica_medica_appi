@@ -23,8 +23,7 @@ import lombok.NoArgsConstructor;
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode(of="id")
-
-public class Usuario implements UserDetails {
+    public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

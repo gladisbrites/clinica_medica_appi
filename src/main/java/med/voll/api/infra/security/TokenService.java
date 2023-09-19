@@ -12,7 +12,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.Payload;
+
+
 
 import med.voll.api.domain.usuarios.Usuario;
 
@@ -21,7 +22,8 @@ public class TokenService {
 
 @Value("${api.security.secret}")
 private String apiSecret;
-private Payload verifier;
+
+
     public String generarToken(Usuario usuario){
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
@@ -29,7 +31,7 @@ private Payload verifier;
                 .withIssuer("Vol med")
                 .withSubject(usuario.getLogin())
                 .withClaim("id", usuario.getId())
-                .withExpiresAt(generarFechaExpiracion())
+               .withExpiresAt(generarFechaExpiracion())
                 .sign(algorithm);
         } catch (JWTCreationException exception){
            throw new RuntimeException();
@@ -37,29 +39,33 @@ private Payload verifier;
 
         
     }
-    public String getSubjet(String token){
+       public String getSubjet(String token){
+         if (token==null){
+             throw new RuntimeException();
+        }
         DecodedJWT verifier=null;
             try {
                 Algorithm algorithm = Algorithm.HMAC256(apiSecret);
                 verifier = JWT.require(algorithm)
-                    // specify an specific claim validations
                     .withIssuer("Vol med")
-                    // reusable verifier instance
                     .build()
                     .verify(token);
-           verifier.getSubject();
+                verifier.getSubject();
             } catch (JWTVerificationException exception){
-                // Invalid signature/claims
+                System.out.println(exception.toString());
             }
             if(verifier.getSubject()==null){
+                System.out.println("validamos que token no es nullS");
               throw new RuntimeException("Verifier invalido ");
             }
              return verifier.getSubject();
      }
 
+     
+    
 
 
   private Instant generarFechaExpiracion()  {
-    return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
+    return LocalDateTime.now().plusHours(1000).toInstant(ZoneOffset.of("-05:00"));
   }
 }
